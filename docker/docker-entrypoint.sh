@@ -14,17 +14,11 @@ fi
 echo "📂 Running migrations..."
 php artisan migrate --force
 
-# Only install Octane config if not already present
-if [ ! -f config/octane.php ]; then
-    echo "⚙️  Installing Octane with FrankenPHP..."
-    php artisan octane:install --server=frankenphp
-fi
-
-# Optional: enable this if you want config/route/view caching
+# Optional: optimize Laravel (disabled to avoid caching view issues in deploys)
 # echo "🔧 Optimizing Laravel..."
 # php artisan optimize
 
-echo "✅ Entrypoint setup complete. Starting web server..."
+echo "✅ Entrypoint setup complete. Starting Supervisor..."
 
-exec php artisan octane:start --server=frankenphp --host=0.0.0.0 --port=80 --admin-port=2019
-
+# Start Supervisor which will launch frankenphp + queue workers
+exec "$@"
