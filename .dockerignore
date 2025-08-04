@@ -1,0 +1,15 @@
+.idea
+.github
+vendor
+node_modules
+.composer/cache
+.git
+*.pem
+composer.lock
+package-lock.json
+bootstrap/cache
+storage
+**/caddy
+frankenphp
+frankenphp-worker.php
+.env
