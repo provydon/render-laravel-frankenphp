@@ -26,5 +26,5 @@ fi
 
 echo "✅ Entrypoint setup complete. Starting web server..."
 
-# ⬇️ Start Laravel Octane using FrankenPHP directly
-exec php artisan octane:start --server=frankenphp --host=0.0.0.0 --port=80
+exec php artisan octane:start --server=frankenphp --host=0.0.0.0 --port=80 --admin-port=2019
+
