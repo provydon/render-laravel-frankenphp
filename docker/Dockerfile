@@ -21,7 +21,7 @@ WORKDIR /app
 
 COPY --from=composer /app/vendor ./vendor
 COPY . .
-COPY docker/.env .env
+COPY docker/.env.production .env
 
 RUN mkdir -p bootstrap/cache storage/logs storage/framework/cache storage/framework/sessions storage/framework/views
 RUN mkdir -p /var/log/supervisor
