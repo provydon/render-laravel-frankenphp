@@ -3,7 +3,7 @@ set -e
 
 echo "🚀 Starting Laravel entrypoint..."
 
-# Optional: support SQLite-based deployments
+# Optional: support SQLite
 if [ -n "$USE_SQLITE" ]; then
     echo "📦 Ensuring SQLite file exists..."
     mkdir -p database
@@ -14,11 +14,10 @@ fi
 echo "📂 Running migrations..."
 php artisan migrate --force
 
-# Optional: optimize Laravel (disabled to avoid caching view issues in deploys)
-# echo "🔧 Optimizing Laravel..."
-# php artisan optimize
+echo "✅ Entrypoint setup complete. Starting FrankenPHP manually..."
 
-echo "✅ Entrypoint setup complete. Starting Supervisor..."
+# Start FrankenPHP manually instead of via supervisor
+/usr/local/bin/frankenphp -S 0.0.0.0:80 public/index.php &
 
-# Start Supervisor which will launch frankenphp + queue workers
-exec "$@"
+# Start queue worker via Supervisor (still useful for background task management)
+exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
