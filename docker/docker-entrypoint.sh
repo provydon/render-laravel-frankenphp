@@ -21,8 +21,8 @@ if [ ! -f config/octane.php ]; then
 fi
 
 # Optimize the Laravel app
-echo "🔧 Optimizing Laravel..."
-php artisan optimize
+# echo "🔧 Optimizing Laravel..."
+# php artisan optimize
 
 echo "✅ Entrypoint setup complete. Launching process..."
 exec "$@"
