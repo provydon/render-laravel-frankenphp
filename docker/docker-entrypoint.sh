@@ -3,7 +3,7 @@ set -e
 
 echo "🚀 Starting Laravel entrypoint..."
 
-# If using SQLite in production (optional)
+# Optional: support SQLite-based deployments
 if [ -n "$USE_SQLITE" ]; then
     echo "📦 Ensuring SQLite file exists..."
     mkdir -p database
@@ -20,9 +20,11 @@ if [ ! -f config/octane.php ]; then
     php artisan octane:install --server=frankenphp
 fi
 
-# Optimize the Laravel app
+# Optional: enable this if you want config/route/view caching
 # echo "🔧 Optimizing Laravel..."
 # php artisan optimize
 
-echo "✅ Entrypoint setup complete. Launching process..."
-exec "$@"
+echo "✅ Entrypoint setup complete. Starting web server..."
+
+# ⬇️ Start Laravel Octane using FrankenPHP directly
+exec php artisan octane:start --server=frankenphp --host=0.0.0.0 --port=80
