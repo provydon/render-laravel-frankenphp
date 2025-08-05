@@ -16,7 +16,7 @@ RUN apk update --no-cache && apk add --no-cache \
     && docker-php-ext-install pcntl
 
 ENV PYTHONWARNINGS="ignore::UserWarning:pkg_resources"
-ENV SERVER_NAME=:8000
+ENV SERVER_NAME=:$PORT
 
 WORKDIR /app
 COPY --from=composer /app /app
@@ -37,9 +37,9 @@ RUN chmod +x /usr/local/bin/entrypoint.sh
 
 USER ${USER}
 
-EXPOSE 8000
+EXPOSE 10000
 
-HEALTHCHECK --interval=30s --timeout=3s CMD wget --no-verbose --spider http://localhost:8000 || exit 1
+HEALTHCHECK --interval=30s --timeout=3s CMD wget --no-verbose --spider http://localhost:$PORT || exit 1
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+CMD ["frankenphp"]

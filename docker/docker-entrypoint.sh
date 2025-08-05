@@ -12,9 +12,6 @@ fi
 echo "📂 Running migrations..."
 php artisan migrate --force
 
-echo "✅ Entrypoint setup complete. Starting FrankenPHP manually..."
-
-PORT="${SERVER_NAME##*:}"
-/usr/local/bin/frankenphp -S 0.0.0.0:${PORT:-8000} public/index.php &
+echo "✅ Entrypoint setup complete."
 
 exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
