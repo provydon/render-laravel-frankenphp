@@ -21,10 +21,13 @@ ENV SERVER_NAME=:8000
 ARG USER=appuser
 RUN adduser -D ${USER} \
     && setcap -r /usr/local/bin/frankenphp \
-    && chown -R ${USER}:${USER} /data/caddy /config/caddy
+    && mkdir -p /app/bootstrap/cache /app/storage/logs /app/storage/framework/{cache,sessions,views} \
+    && mkdir -p /var/log/supervisor \
+    && chmod -R 775 /app/storage /app/bootstrap/cache /app/public /app/database \
+    && chown -R ${USER}:${USER} /data/caddy /config/caddy /app
 
-USER ${USER}
 WORKDIR /app
+USER ${USER}
 
 COPY --from=composer /app/vendor ./vendor
 COPY . .
