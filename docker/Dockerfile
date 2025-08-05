@@ -22,11 +22,11 @@ WORKDIR /app
 COPY --from=composer /app /app
 
 ARG USER=appuser
-RUN adduser -D ${USER} \
+RUN adduser -D appuser \
     && setcap -r /usr/local/bin/frankenphp \
-    && mkdir -p /var/log/supervisor \
+    && mkdir -p /var/log/supervisor /app/public /app/database \
     && chmod -R 775 /app/storage /app/bootstrap/cache /app/public /app/database \
-    && chown -R ${USER}:${USER} /data/caddy /config/caddy /app
+    && chown -R appuser:appuser /data/caddy /config/caddy /app
 
 USER ${USER}
 
