@@ -18,25 +18,20 @@ RUN apk update --no-cache && apk add --no-cache \
 ENV PYTHONWARNINGS="ignore::UserWarning:pkg_resources"
 ENV SERVER_NAME=:8000
 
+WORKDIR /app
+COPY --from=composer /app /app
+
 ARG USER=appuser
 RUN adduser -D ${USER} \
     && setcap -r /usr/local/bin/frankenphp \
-    && mkdir -p /app/bootstrap/cache /app/storage/logs /app/storage/framework/{cache,sessions,views} \
     && mkdir -p /var/log/supervisor \
     && chmod -R 775 /app/storage /app/bootstrap/cache /app/public /app/database \
     && chown -R ${USER}:${USER} /data/caddy /config/caddy /app
 
-WORKDIR /app
 USER ${USER}
 
-COPY --from=composer /app/vendor ./vendor
-COPY . .
 COPY docker/.env.production .env
-
-RUN mkdir -p bootstrap/cache storage/logs storage/framework/{cache,sessions,views} \
-    && mkdir -p /var/log/supervisor \
-    && chmod -R 775 storage bootstrap/cache public database \
-    && chmod +x artisan
+RUN chmod +x artisan
 
 COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY docker/docker-entrypoint.sh /usr/local/bin/entrypoint.sh
