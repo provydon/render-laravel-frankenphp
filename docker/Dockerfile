@@ -22,13 +22,11 @@ WORKDIR /app
 COPY --from=composer /app /app
 
 ARG USER=appuser
-RUN adduser -D appuser \
+RUN adduser -D ${USER} \
     && setcap -r /usr/local/bin/frankenphp \
     && mkdir -p /var/log/supervisor /app/public /app/database \
     && chmod -R 775 /app/storage /app/bootstrap/cache /app/public /app/database \
-    && chown -R appuser:appuser /data/caddy /config/caddy /app
-
-USER ${USER}
+    && chown -R ${USER}:${USER} /data/caddy /config/caddy /app
 
 COPY docker/.env.production .env
 RUN chmod +x artisan
@@ -36,6 +34,8 @@ RUN chmod +x artisan
 COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY docker/docker-entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
+
+USER ${USER}
 
 EXPOSE 8000
 
